@@ -6,7 +6,6 @@ def bubble_sort(numbers):
     return numbers
 
 
-
 if __name__ == "__main__":
     unsorted_list = [64, 34, 25, 12, 22, 11, 90]
 
