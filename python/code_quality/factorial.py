@@ -4,5 +4,8 @@ def f(n):
     else:
         return n * f(n - 1)
 
+#Get a
 a = int(input())
+
+# print f
 print(f(a))
