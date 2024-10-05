@@ -5,9 +5,8 @@ def calculate_bmi(weight, height):
     return weight / (height ** 2)
 
 
-# Функція для виведення результатів та коментарів
 def evaluate_bmi(name, bmi):
-    rounded_bmi = math.ceil(bmi)  # Округляємо BMI в більший бік
+    rounded_bmi = math.ceil(bmi)
     print(f"\n{name}: BMI = {rounded_bmi}")
     if rounded_bmi < 18.5:
         print("Недостатня вага")
@@ -16,24 +15,29 @@ def evaluate_bmi(name, bmi):
     else:
         print("Надмірна вага")
 
+def print_bmi(people: dict):
+    # Обчислення BMI та виведення результатів
+    for name, data in people.items():
+        bmi = calculate_bmi(data["weight"], data["height"])
+        evaluate_bmi(name, bmi)
 
-people = {}
+def save_input(peoplenum) -> dict:
+    people = {}
+    for i in range(peoplenum):
+        print(f"\nЛюдина {i + 1}:")
+        name = input("Ім'я: ")
+        weight = float(input("Вага (кг): "))
+        height = float(input("Ріст (м): "))
 
-n = int(input("Введіть кількість людей: "))
+        people[name] = {
+            "weight": weight,
+            "height": height
 
-for i in range(n):
-    print(f"\nЛюдина {i + 1}:")
-    name = input("Ім'я: ")
-    weight = float(input("Вага (кг): "))
-    height = float(input("Ріст (м): "))
+        }
+    return people
 
-    # Збереження даних у словнику
-    people[name] = {
-        "weight": weight,
-        "height": height
-    }
 
-# Обчислення BMI та виведення результатів
-for name, data in people.items():
-    bmi = calculate_bmi(data["weight"], data["height"])
-    evaluate_bmi(name, bmi)
+if __name__ == "__main__":
+    n = int(input("Введіть кількість людей: "))
+    people_input = save_input(n)
+    print_bmi(people_input)
