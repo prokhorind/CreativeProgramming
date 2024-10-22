@@ -24,6 +24,6 @@ print(account.withdraw(300))  # Іван Іванов зняв 300 грн. Ба�
 print(account.check_balance())  # Баланс: 700 грн
 
 account2 = BankAccount("John Smith")
-print(account2.deposit(2000))  # Іван Іванов поповнив рахунок на 2000 грн. Баланс: 2000 грн
-print(account2.withdraw(500))  # Іван Іванов зняв 500 грн. Баланс: 1500 грн
+print(account2.deposit(2000))  # John Smith поповнив рахунок на 2000 грн. Баланс: 2000 грн
+print(account2.withdraw(500))  # John Smith зняв 500 грн. Баланс: 1500 грн
 print(account2.check_balance())  # Баланс: 1500 грн
