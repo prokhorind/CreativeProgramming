@@ -29,15 +29,15 @@ rates = get_exchange_rates()
 if rates:
     rep = True
     while rep:
-        currencies = ['USD to EUR', 'EUR to USD', 'USD to UAH', 'UAH to USD']
+        currencies = ['EUR to UAH', 'UAH to EUR', 'USD to UAH', 'UAH to USD']
         choice = buttonbox('Оберіть конверсію:', choices=currencies)
 
         amount = float(enterbox('Введіть суму для конвертації:'))
 
         # Словник для відповідності між обраною конверсією та API-курсом
         currency_mapping = {
-            'USD to EUR': rates.get('USD_to_EUR', 'Недоступно'),
-            'EUR to USD': rates.get('EUR_to_USD', 'Недоступно'),
+            'EUR to UAH': rates.get('EUR_to_UAH', 'Недоступно'),
+            'UAH to EUR': rates.get('UAH_to_EUR', 'Недоступно'),
             'USD to UAH': rates.get('USD_to_UAH', 'Недоступно'),
             'UAH to USD': rates.get('UAH_to_USD', 'Недоступно'),
         }
