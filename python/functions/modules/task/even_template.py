@@ -1,10 +1,10 @@
-# Площа прямокутника
-width = float(input("Введіть ширину прямокутника: "))
-height = float(input("Введіть висоту прямокутника: "))
-rectangle_area = width * height
-print(f"Площа прямокутника: {rectangle_area}")
+numbers = []
+for _ in range(5):
+    number = int(input("Введіть число: "))
+    numbers.append(number)
 
-# Площа кола
-radius = float(input("Введіть радіус кола: "))
-circle_area = 3.14159 * radius ** 2
-print(f"Площа кола: {circle_area}")
+for num in numbers:
+    if num % 2 == 0:
+        print(f"Число {num} є парним.")
+    else:
+        print(f"Число {num} є непарним.")
