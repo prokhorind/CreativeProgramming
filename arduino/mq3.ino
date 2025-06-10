@@ -10,28 +10,31 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 #define MQ3_PIN A0
 
 unsigned long lastUpdate = 0;
-const unsigned long updateInterval = 3000; // Update every 1 sec
+const unsigned long updateInterval = 1000;  // Update every 1 second
 int lastSensorValue = -1;  // Store previous sensor reading
 
+// Function to draw progress bar
 void drawProgressBar(int x, int y, int w, int h, int progress) {
   display.drawRect(x, y, w, h, SSD1306_WHITE);
   int fillWidth = map(progress, 0, 1023, 0, w);
   display.fillRect(x + 1, y + 1, fillWidth - 2, h - 2, SSD1306_WHITE);
 }
 
+// **Setup Function: Initializes Display & Sensor**
 void setup() {
   Serial.begin(9600);
   Wire.begin();
-  Wire.setClock(400000);
+  Wire.setClock(400000);  // Boost I2C speed for stability
 
   if (!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {
-    Serial.println(F("SSD1306 allocation failed, retrying..."));
+    Serial.println(F("Display failed, retrying..."));
 
-    Wire.end();
+    Wire.end();  // Reset I2C
     delay(500);
-    Wire.begin();
+    Wire.begin();  // Restart I2C
+
     if (!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {
-      Serial.println(F("OLED failed, halting"));
+      Serial.println(F("OLED failed, stopping"));
       while (true);
     }
   }
@@ -46,51 +49,43 @@ void setup() {
 }
 
 void loop() {
-  // **Auto-Recover Display If Disconnected**
-  if (!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {
-    Serial.println(F("OLED disconnected, reinitializing..."));
-    Wire.end();
-    delay(500);
-    Wire.begin();
-    display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
-    display.clearDisplay();
-    display.display();
-  }
 
-  // **Only update when needed**
   if (millis() - lastUpdate > updateInterval) {
     lastUpdate = millis();
 
     int sensorValue = analogRead(MQ3_PIN);
 
-    // **Prevent Unnecessary Screen Updates**
+    // Prevent unnecessary updates if sensor value barely changes
     if (abs(sensorValue - lastSensorValue) < 5) {
-      return; // Skip update if value is nearly the same
+      return;
     }
-
     lastSensorValue = sensorValue;
 
-    display.clearDisplay();
+    // **Instead of clearing the entire screen, overwrite sections**
+    display.fillRect(0, 0, SCREEN_WIDTH, 12, SSD1306_BLACK); // Clear sensor text smoothly
     display.setCursor(0, 0);
-    display.setTextSize(2);
-    display.print("Sensor: ");
     display.setTextSize(1);
+    display.print("Sensor: ");
+    display.setTextSize(2);
     display.println(sensorValue);
 
     drawProgressBar(0, 16, SCREEN_WIDTH, 10, sensorValue);
 
+    display.fillRect(0, 32, SCREEN_WIDTH, 32, SSD1306_BLACK); // Clear status text smoothly
     display.setTextSize(1);
     display.setCursor(0, 32);
+    display.println("Status:");
+    display.setTextSize(2);
     if (sensorValue < 100) {
-      display.println("Status: Sober");
+      display.println("Sober");
     } else if (sensorValue < 200) {
-      display.println("Status: Tipsy :)");
+      display.println("Tipsy :)");
     } else if (sensorValue < 350) {
-      display.println("Status: Drunk :P");
+      display.println("Drunk :P");
     } else if (sensorValue < 500) {
-      display.println("Status: Wasted :O");
+      display.println("Wasted :O");
     } else {
-      display.println("Status: Blackout X");
+      display.println("Blackout X");
     }
 
     display.display();
@@ -98,3 +93,4 @@ void loop() {
     Serial.println(sensorValue);
   }
 }
+
