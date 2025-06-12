@@ -55,6 +55,9 @@ void loop() {
 
     int sensorValue = analogRead(MQ3_PIN);
 
+    Serial.print("Sensor Value: ");
+    Serial.println(sensorValue);
+
     // Prevent unnecessary updates if sensor value barely changes
     if (abs(sensorValue - lastSensorValue) < 5) {
       return;
@@ -76,21 +79,19 @@ void loop() {
     display.setCursor(0, 32);
     display.println("Status:");
     display.setTextSize(2);
-    if (sensorValue < 100) {
+    if (sensorValue < 500) {
       display.println("Sober");
-    } else if (sensorValue < 200) {
+    } else if (sensorValue < 650) {
       display.println("Tipsy :)");
-    } else if (sensorValue < 350) {
+    } else if (sensorValue < 750) {
       display.println("Drunk :P");
-    } else if (sensorValue < 500) {
+    } else if (sensorValue < 850) {
       display.println("Wasted :O");
     } else {
       display.println("Blackout X");
     }
 
     display.display();
-    Serial.print("Sensor Value: ");
-    Serial.println(sensorValue);
   }
 }
 
